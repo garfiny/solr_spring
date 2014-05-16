@@ -13,17 +13,17 @@ import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 
 public interface SolrProductRepository extends
-		SolrCrudRepository<Product, String> {
+		SolrCrudRepository<String, String> {
 
-	Page<Product> findByPopularity(Integer popularity, Pageable page);
-
-	Page<Product> findByNameOrDescription(@Boost(2) String name,
-			String description, Pageable page);
-
-	@Highlight
-	HighlightPage<Product> findByNameIn(Collection<String> name, Page page);
+//	Page<String> findByPopularity(Integer popularity, Pageable page);
+//
+//	Page<String> findByNameOrDescription(@Boost(2) String name,
+//			String description, Pageable page);
+//
+//	@Highlight
+//	HighlightPage<String> findByNameIn(Collection<String> name, Page page);
 
 	@Query(value = "name:?0")
 	@Facet(fields = { "cat" }, limit = 20)
-	FacetPage<Product> findByNameAndFacetOnCategory(String name, Pageable page);
+	FacetPage<String> findByNameAndFacetOnCategory(String name, Pageable page);
 }
