@@ -1,0 +1,18 @@
+prefix asn: <http://purl.org/ASN/schema/core/>
+prefix dct: <http://purl.org/dc/terms/>
+
+construct
+ { ?s ?p ?o }
+where
+{
+  {
+    ?s ?p ?o . 
+    filter (?s = <http://rdf.australiancurriculum.edu.au/elements/2012/08/7f6bd186-fcdf-4e46-a727-9e4600a2a39b>) 
+	}
+	union
+	{
+    ?s ?p ?o . 
+    ?s dct:isPartOf ?d . 
+    filter (?d = <http://rdf.australiancurriculum.edu.au/elements/2012/08/7f6bd186-fcdf-4e46-a727-9e4600a2a39b>) 
+	}
+}

@@ -14,7 +14,6 @@ import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
 @Configuration
 @EnableSolrRepositories("com.garfiny.solr.repositories")
 @Profile("prod")
-@PropertySource("classpath:application.properties")
 public class HttpSolrContext {
 
     @Resource

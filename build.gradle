@@ -1,3 +1,7 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
 buildscript {
     repositories {
         maven { url "http://repo.spring.io/libs-milestone" }
@@ -8,12 +12,8 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
-
 sourceCompatibility = 1.7
-version = '0.0.1'
+version = '1.0.0'
 jar {
     manifest {
         attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
@@ -22,23 +22,15 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url "http://repo.spring.io/libs-milestone" }
+    maven { url "http://repo.spring.io/libs-milestone/" }
+    maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile 'org.springframework.data:spring-data-solr:1.0.0.RELEASE'
+    
     testCompile group: 'junit', name: 'junit', version: '4.+'
-    compile 'org.springframework.data:spring-data-solr:1.1.2.RELEASE'
-}
-
-test {
-    systemProperties 'property': 'value'
-}
-
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
-    }
 }

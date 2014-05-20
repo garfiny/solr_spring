@@ -14,9 +14,8 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean;
 
 @Configuration
-@EnableSolrRepositories(basePackages={"com.garfiny.solr.repositories"}, multicoreSupport=true)
+@EnableSolrRepositories(basePackages={"com.garfiny.solr.repositories"})
 @Profile("dev")
-@PropertySource("classpath:application.properties")
 public class EmbeddedSolrContext {
 
   static final String SOLR_HOST = "solr.host";
