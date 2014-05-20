@@ -13,10 +13,12 @@ import java.net.URLConnection;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 @Component
+@PropertySource("classpath:australian_curriculum_rdf.properties")
 public class AustralianCurriculumRdfDownloader {
 
 	public static final Logger LOG = Logger
@@ -25,15 +27,15 @@ public class AustralianCurriculumRdfDownloader {
 	private static final String ENGLISH_RDF_FILENAME = "english.rdf";
 
 	@Value("${australian_curriculum_sparql_endpoint}")
-	private String accSparqlUrl;
+	private Resource accSparqlUrl;
 
 	@Value("classpath:${english_query}")
 	private Resource englishQuery;
 
 	@Value("${download_target_dir}")
-	private String downloadTargetDir;
+	private Resource downloadTargetDir;
 
-	public String getAccSparqlUrl() {
+	public Resource getAccSparqlUrl() {
 		return accSparqlUrl;
 	}
 
@@ -54,16 +56,20 @@ public class AustralianCurriculumRdfDownloader {
 	public void downloadEnglish() {
 		URLConnection connection = null;
 		try {
-			URI uri = new URI(null, null, accSparqlUrl,
+			URI uri = new URI(null, null, accSparqlUrl.getURI().toString(),
 					"query=" + sparqlQueryToString(englishQuery), null);
+			System.out.println(downloadTargetDir);
 			connection = uri.toURL().openConnection();
 			connection.setRequestProperty("Accept", "application/rdf+xml");
 		} catch (URISyntaxException | IOException e) {
 		}
-		try (InputStream inputStream = connection.getInputStream();
-				Writer writer = new FileWriter(new File(String.format("%s/%s",
-						downloadTargetDir, ENGLISH_RDF_FILENAME)))) {
+//		try (InputStream inputStream = connection.getInputStream();
+//				Writer writer = new FileWriter(new File(String.format("%s/%s",
+//						downloadTargetDir, ENGLISH_RDF_FILENAME)))) {
+		try (InputStream inputStream = connection.getInputStream()) {
+			StringWriter writer = new StringWriter();
 			IOUtils.copy(inputStream, writer, "UTF-8");
+			System.out.println(writer.toString());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

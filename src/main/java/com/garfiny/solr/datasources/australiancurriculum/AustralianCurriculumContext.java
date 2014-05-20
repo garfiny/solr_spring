@@ -6,7 +6,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan
-@PropertySource("classpath:australian_curriculum_rdf.properties")
 public class AustralianCurriculumContext {
 
 }
