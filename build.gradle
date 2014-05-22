@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
+apply plugin: 'jetty'
+apply plugin: 'war'
 
 buildscript {
     repositories {
@@ -23,13 +25,13 @@ jar {
 repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/libs-milestone/" }
-    maven { url "http://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile group: 'commons-collections', name: 'commons-collections'
+    compile 'com.google.guava:guava:17.0'
     compile 'org.springframework.data:spring-data-solr:1.0.0.RELEASE'
     
     testCompile "org.springframework:spring-test"

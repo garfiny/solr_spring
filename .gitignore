@@ -10,6 +10,7 @@
 *.ear
 target/
 bin/
+build/
 .gradle/
 .settings
 .settings/*
