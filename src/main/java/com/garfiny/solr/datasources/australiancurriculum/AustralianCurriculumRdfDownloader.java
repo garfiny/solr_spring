@@ -1,5 +1,6 @@
 package com.garfiny.solr.datasources.australiancurriculum;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,6 +10,11 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardOpenOption.*;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -55,23 +61,24 @@ public class AustralianCurriculumRdfDownloader {
 
 	public void downloadEnglish() {
 		URLConnection connection = null;
+		Path newFile = null;
 		try {
 			URI uri = new URI(null, null, accSparqlUrl.getURI().toString(),
 					"query=" + sparqlQueryToString(englishQuery), null);
-			System.out.println(downloadTargetDir);
 			connection = uri.toURL().openConnection();
 			connection.setRequestProperty("Accept", "application/rdf+xml");
+			
+			Path path = Paths.get(downloadTargetDir.getURI());
+			Path file = path.resolve(ENGLISH_RDF_FILENAME);
+			Files.deleteIfExists(file);
+			newFile = Files.createFile(file);
 		} catch (URISyntaxException | IOException e) {
 		}
-//		try (InputStream inputStream = connection.getInputStream();
-//				Writer writer = new FileWriter(new File(String.format("%s/%s",
-//						downloadTargetDir, ENGLISH_RDF_FILENAME)))) {
-		try (InputStream inputStream = connection.getInputStream()) {
-			StringWriter writer = new StringWriter();
+
+		try (InputStream inputStream = connection.getInputStream();
+				BufferedWriter writer = Files.newBufferedWriter(newFile, CREATE)) {
 			IOUtils.copy(inputStream, writer, "UTF-8");
-			System.out.println(writer.toString());
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
 		}
 	}
 }
