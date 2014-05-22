@@ -60,25 +60,29 @@ public class AustralianCurriculumRdfDownloader {
 	}
 
 	public void downloadEnglish() {
-		URLConnection connection = null;
-		Path newFile = null;
+		InputStream inputStream = null;
+		BufferedWriter writer = null;
 		try {
 			URI uri = new URI(null, null, accSparqlUrl.getURI().toString(),
 					"query=" + sparqlQueryToString(englishQuery), null);
-			connection = uri.toURL().openConnection();
+			URLConnection connection = uri.toURL().openConnection();
 			connection.setRequestProperty("Accept", "application/rdf+xml");
 			
 			Path path = Paths.get(downloadTargetDir.getURI());
 			Path file = path.resolve(ENGLISH_RDF_FILENAME);
 			Files.deleteIfExists(file);
-			newFile = Files.createFile(file);
-		} catch (URISyntaxException | IOException e) {
-		}
-
-		try (InputStream inputStream = connection.getInputStream();
-				BufferedWriter writer = Files.newBufferedWriter(newFile, CREATE)) {
+			writer = Files.newBufferedWriter(Files.createFile(file), CREATE);
+			inputStream = connection.getInputStream();
 			IOUtils.copy(inputStream, writer, "UTF-8");
-		} catch (IOException e) {
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				inputStream.close();
+				writer.close();
+			}catch(IOException ix) {
+				ix.printStackTrace();
+			}
 		}
 	}
 }
