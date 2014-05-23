@@ -27,12 +27,26 @@ repositories {
     maven { url "http://repo.spring.io/libs-milestone/" }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.name == 'log4j') {
+            details.useTarget "org.slf4j:log4j-over-slf4j:1.7.7"
+        }
+    }
+}
+
 dependencies {
+	compile 'org.slf4j:slf4j-api:1.7.7'
+	compile 'org.slf4j:log4j-over-slf4j:1.7.7'
 	compile 'org.springframework.boot:spring-boot-starter-web'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
-    compile group: 'commons-collections', name: 'commons-collections'
+	compile 'org.springframework.boot:spring-boot-starter-jetty'
+    compile 'commons-collections:commons-collections'
     compile 'com.google.guava:guava:17.0'
     compile 'org.springframework.data:spring-data-solr:1.0.0.RELEASE'
+    compile ('org.apache.jena:jena-core:2.11.1') {
+    	exclude group: 'org.slf4j'
+    }
+    compile 'com.google.code.gson:gson:2.2.4'
     
     testCompile "org.springframework:spring-test"
     testCompile group: 'junit', name: 'junit', version: '4.+'
